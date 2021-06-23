@@ -1,62 +1,64 @@
 print("\t\t***Easy Calculator!***\t\t")
 
+
 def do_operation(operand, num1, num2):
- if operand  == '*' or operand  == 'x' or operand == 'X':
+    if operand == '*' or operand == 'x' or operand == 'X':
         return num1 * num2
- elif operand == '/':
+    elif operand == '/':
         return num1 / num2
- elif operand == '-':
+    elif operand == '-':
         return num1 - num2
- elif operand == '+':
+    elif operand == '+':
         return num1 + num2
- elif operand == '^':
+    elif operand == '^':
         return pow(num1, num2)
- elif operand == '%':
+    elif operand == '%':
         return num1 % num2
- else:
-     return 0
+    else:
+        return 0
+
 
 def split_str(input_str):
-    check_operands = ['+','-','*', '/', 'x', 'X', '^', '%']
-    partitions = []
-    op = ''
+    operands = ['+', '-', '*', '/', 'x', 'X', '^', '%']
+    length = len(input_str)
 
-    #check for one of the valid operators from the 'operands' list
-    for chr in check_operands:
-        if input_str.find(chr) > -1: #the find() function returns the index where a sub-string is found. it returns '-1' otherwise
-            op = chr # set op to the operator character/sysmbol that was found
-        
-    partitions = input_str.partition(op)# 'partition()' returns a 3-tuple. the first partition [0], the seperator[1], and the last partition[2]
-    numA = float(partitions[0])
-    numB = float(partitions[2])
-    operator = partitions[1]
-    return (numA, numB, operator) #return a tuple with two floats and one str/char
-    
-quit = False
+    def findOperatorIndex(query_str):
+        for index in range(1, length):
+            str_chr = query_str[index]
+            for val in operands:
+                if val == str_chr:
+                    return index
+        return -1
 
-while(not quit):
+    operatorIndex = findOperatorIndex(input_str)
+
+    numA = float(str(input_str[0: operatorIndex]))
+    numB = float(str(input_str[operatorIndex + 1: length]))
+
+    return numA, numB, input_str[operatorIndex]  # return a tuple with two floats and one str/char
+
+
+Quit = False
+
+while not Quit:
     try:
-        (num1, num2, operand) = split_str(str(input(">")))
+        userInput = str(input("> "))
+        if userInput.lower() == "quit" or userInput.lower() == "exit" or userInput.lower() == "q":
+            Quit = True
+        else:
+            (num1, num2, operand) = split_str(userInput)
 
-        print("Answer: " + str(do_operation(operand, num1, num2)))
+            print("Answer: " + str(do_operation(operand, num1, num2)))
 
-        if operand == "%":
-            print("*NB: modulous function may return inaccurate results when using doubles and floats")
+            if operand == "%":
+                print("*NB: modulus function may return inaccurate results when using doubles and floats")
 
-        print()
+            print()
 
-        num1 = num2 = 0.0
+            num1 = num2 = 0.0
 
     except ZeroDivisionError:
-         print("Can't divide by zero!")
+        print("Can't divide by zero!")
 
     except ValueError:
-         print("Invalid Input!")
-
-    except:
-        print("Error! no spaces allowed ")
-    
-
-
-
-
+        print("Invalid Input!")
